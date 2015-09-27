@@ -1,11 +1,12 @@
 from django.http import HttpResponse
-
+import re
 import requests
 from bs4 import BeautifulSoup
 
 from main.models import *
 
 def index(request):
+    reKeyword = re.compile(r'(?ism)\bamor\b')
     for site in Site.objects.all():
         page = requests.get(site.url)
         page = page.text
@@ -24,9 +25,8 @@ def index(request):
                         model_link.save()
 
                         conteudo = requests.get(link).text
-                        conteudo = BeautifulSoup(conteudo)
-
-                        if conteudo.get_text().find('amor') != -1:
+                        conteudo = BeautifulSoup(conteudo, "html.parser")
+                        if reKeyword.search(conteudo.get_text()):
                             alerta = Alerta()
                             alerta.site = site
                             alerta.url = link
@@ -34,4 +34,4 @@ def index(request):
                             alerta.palavras_chave = 'amor'
                             alerta.save()
 
-    return HttpResponse('Nothing here...')
+    return HttpResponse('<h2>Crawled!</h2>')
