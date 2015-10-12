@@ -6,8 +6,12 @@ from bs4 import BeautifulSoup
 from main.models import *
 
 def index(request):
-    reKeyword = re.compile(r'(?ism)\bamor\b')
+    return HttpResponse('<a href="/crawler/">clique aqui para iniciar.</a>')
+
+def crawler(request):
+    
     for site in Site.objects.all():
+        count = 0
         page = requests.get(site.url)
         page = page.text
         soup = BeautifulSoup(page, 'html.parser')
@@ -26,12 +30,28 @@ def index(request):
 
                         conteudo = requests.get(link).text
                         conteudo = BeautifulSoup(conteudo, "html.parser")
-                        if reKeyword.search(conteudo.get_text()):
-                            alerta = Alerta()
-                            alerta.site = site
-                            alerta.url = link
-                            alerta.texto = conteudo
-                            alerta.palavras_chave = 'amor'
-                            alerta.save()
 
-    return HttpResponse('<h2>Crawled!</h2>')
+                        for keyword in Keyword.objects.all():
+                            reKeyword = re.compile(r'(?ism)\b%s\b'%keyword.name)
+                            if reKeyword.search(conteudo.get_text()):
+                                if Alerta.objects.filter(url=link).count() == 0:
+                                    alerta = Alerta()
+                                    alerta.site = site
+                                    alerta.url = link
+                                    alerta.texto = conteudo
+                                    alerta.save()
+                                    alerta.palavras_chave.add(keyword)
+                                    try:
+                                        alerta.save()
+                                    except:
+                                        #TODO 
+                                        #Exception Value: 'NoneType' object is not callable
+                                        pass
+                                    count = count + 1;
+                                else:
+                                    alerta = Alerta.objects.filter(url=link)[0]
+                                    alerta.palavras_chave.add(keyword)
+                                    alerta.save()
+
+    response = str(count) + ' alertas cadastrados com as palavras chaves designadas.'
+    return HttpResponse(response)
