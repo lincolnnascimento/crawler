@@ -17,7 +17,6 @@ def index(request):
     return render(request, template, dictionary)
 
 def crawler(request):
-    
     for site in Site.objects.all():
         count = 0
         page = requests.get(site.url)
