@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Read me Later</title>
+    {% load staticfiles %}
+    
+    <link rel="icon" type="image/png" href="{% static "crawler/favicon.png" %}">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static "components/bootstrap/dist/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "crawler/css/style.css" %}">
+    
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+    
+    <!-- Bootstrap -->
+    <script src='{% static "components/jquery/dist/js/jquery.min.js" %}'></script>
+    <script src='{% static "components/bootstrap/dist/js/bootstrap.min.js" %}'></script>
+    <script src='{% static "crawler/scripts/scripts.js" %}'></script>
+</body>
+</html>

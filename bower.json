@@ -1,0 +1,25 @@
+{
+  "name": "crawler",
+  "version": "0.0.0",
+  "directory": "static/",
+  "authors": [
+    "Lincoln Nascimento <this.lincoln@gmail.com>"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "license": "Private",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from django.shortcuts import render
+
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -6,7 +8,13 @@ from bs4 import BeautifulSoup
 from main.models import *
 
 def index(request):
-    return HttpResponse('<a href="/crawler/">clique aqui para iniciar.</a>')
+    dictionary = {}
+    if(request.session.get('logado', False) == True):
+        template = 'index.html'
+    else:
+        template = 'login.html'
+
+    return render(request, template, dictionary)
 
 def crawler(request):
     
